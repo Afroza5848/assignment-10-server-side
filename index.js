@@ -11,7 +11,7 @@ app.use(express.json());
 // timberZone
 // 9o4tFpMeAo3L9xzI
 
-console.log(process.env.DB_PASS);
+
 
 //const uri = "mongodb+srv://<username>:<password>@cluster0.uc5r0l2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.uc5r0l2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -32,7 +32,14 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
-        app.get("/items" , async(req,res) => {
+        app.get('/items', async(req,res) => {
+            const cursor = itemsCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
+        app.post("/items" , async(req,res) => {
+            console.log(req.body);
             const result = await itemsCollection.insertOne(req.body);
             res.send(result)
         })
