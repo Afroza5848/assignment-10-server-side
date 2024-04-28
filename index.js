@@ -63,6 +63,28 @@ async function run() {
             const result = await itemsCollection.deleteOne(query);
             res.send(result)
         })
+        app.put('/items/:id', async(req,res) => {
+            const updateItem = req.body;
+            const id = req.params.id;
+            const filter = {_id: new ObjectId(id)};
+            const options = { upsert: true };
+
+            const item = {
+                $set: {
+                    item_name: updateItem.item_name,
+                    subCatOption: updateItem.subCatOption,
+                    massage: updateItem.massage,
+                    photo: updateItem.photo,
+                    price: updateItem.price,
+                    rating: updateItem.rating,
+                    processing_time: updateItem.processing_time,
+                    stockOption: updateItem.stockOption,
+                    customOption: updateItem.customOption
+                }
+            }
+            const result = await itemsCollection.updateOne(filter,item,options);
+            res.send(result);
+        })
 
 
         // Send a ping to confirm a successful connection
