@@ -57,6 +57,12 @@ async function run() {
             const result = await itemsCollection.insertOne(req.body);
             res.send(result)
         })
+        app.delete('/items/:id', async(req,res) => {
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)};
+            const result = await itemsCollection.deleteOne(query);
+            res.send(result)
+        })
 
 
         // Send a ping to confirm a successful connection
