@@ -27,6 +27,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
     const itemsCollection = client.db("itemsDB").collection('item');
+    const categoriesCollection = client.db("itemsDB").collection('categories');
    
     try {
         // Connect the client to the server	(optional starting in v4.7)
@@ -57,6 +58,7 @@ async function run() {
             const result = await itemsCollection.insertOne(req.body);
             res.send(result)
         })
+
         app.delete('/items/:id', async(req,res) => {
             const id = req.params.id;
             const query = {_id: new ObjectId(id)};
@@ -85,6 +87,12 @@ async function run() {
             const result = await itemsCollection.updateOne(filter,item,options);
             res.send(result);
         })
+        //  art and craft categories
+        app.get('/categories', async(req,res) => {
+            const cursor = categoriesCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        }) 
 
 
         // Send a ping to confirm a successful connection
